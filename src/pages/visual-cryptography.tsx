@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import { ImageCanvas } from "../algorithms/visual-cryptography/shared/ImageCanvas";
-import { Paragraph, SubTitle, Title } from "../algorithms/shared/Title";
 import { ShareSuperposition } from "../algorithms/visual-cryptography/ShareSuperposition";
 import { renderShareSuperposition } from "../algorithms/visual-cryptography/share-superposition/render";
 import { renderShares } from "../algorithms/visual-cryptography/share-generation/render";
@@ -32,14 +31,14 @@ export default function VisualCryptography() {
   }, []);
 
   return (
-    <div>
-      <Title>Kryptografia wizualna</Title>
-      <SubTitle>Wczytywanie obrazu</SubTitle>
+    <div className="prose">
+      <h2>Kryptografia wizualna</h2>
+      <h3>Wczytywanie obrazu</h3>
       {!imgFile && (
-        <Paragraph>
+        <p>
           Wybierz zdjęcie, którego zawartość zostanie zakodowana w dwóch
           udziałach
-        </Paragraph>
+        </p>
       )}
       <input
         type="file"
@@ -56,7 +55,7 @@ export default function VisualCryptography() {
       </button>
       {imgFile && (
         <>
-          <SubTitle>Wczytany obraz</SubTitle>
+          <h3>Wczytany obraz</h3>
           <ImageCanvas
             className="border border-black"
             imgFile={imgFile}
@@ -65,11 +64,11 @@ export default function VisualCryptography() {
           />
           <div className="flex gap-3 overflow-auto">
             <div>
-              <SubTitle>Udział 1</SubTitle>
+              <h3>Udział 1</h3>
               <ImageCanvas ref={shareOneCanvasRef} />
             </div>
             <div>
-              <SubTitle>Udział 2</SubTitle>
+              <h3>Udział 2</h3>
               <ImageCanvas ref={shareTwoCanvasRef} />
             </div>
           </div>

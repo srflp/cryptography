@@ -1,4 +1,3 @@
-import { SubTitle } from "../shared/Title";
 import { ImageCanvas } from "./shared/ImageCanvas";
 import { FC, Ref, useState } from "react";
 import {
@@ -22,11 +21,10 @@ export const ShareSuperposition: FC<Props> = ({
 
   return (
     <>
-      <SubTitle>Złożenie udziałów</SubTitle>
+      <h3>Złożenie udziałów</h3>
       <div className="flex flex-col gap-2 mb-3">
         {[0, 1, 2, 3].map((i) => {
           const [a, b] = i.toString(2).padStart(2, "0").split("").map(Number);
-
           return (
             <div className="flex gap-3" key={i}>
               {a ? WhiteBox : BlackBox}

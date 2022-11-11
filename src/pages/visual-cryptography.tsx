@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { ImageCanvas } from "../algorithms/visual-cryptography/shared/ImageCanvas";
-import { SubTitle, Title } from "../algorithms/shared/Title";
+import { Paragraph, SubTitle, Title } from "../algorithms/shared/Title";
 import { ShareSuperposition } from "../algorithms/visual-cryptography/ShareSuperposition";
 import { renderShareSuperposition } from "../algorithms/visual-cryptography/share-superposition/render";
 import { renderShares } from "../algorithms/visual-cryptography/share-generation/render";
@@ -36,10 +36,10 @@ export default function VisualCryptography() {
       <Title>Kryptografia wizualna</Title>
       <SubTitle>Wczytywanie obrazu</SubTitle>
       {!imgFile && (
-        <div>
+        <Paragraph>
           Wybierz zdjęcie, którego zawartość zostanie zakodowana w dwóch
           udziałach
-        </div>
+        </Paragraph>
       )}
       <input
         type="file"

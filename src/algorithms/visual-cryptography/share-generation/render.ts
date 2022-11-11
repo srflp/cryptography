@@ -50,7 +50,10 @@ export const renderShares = (
 
     const colorSchemaSet = isBlack ? blackSchemaSet : whiteSchemaSet;
 
-    const schema = colorSchemaSet[getRandomInt(0, 2)];
+    const schema =
+      colorSchemaSet[
+        getRandomInt(0, Math.min(blackSchemaSet.length, whiteSchemaSet.length))
+      ];
 
     for (let j = 0; j < 2; j++) {
       const colorSquare = schema[j];

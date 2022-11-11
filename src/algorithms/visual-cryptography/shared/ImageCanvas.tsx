@@ -1,15 +1,12 @@
 import { forwardRef, HTMLAttributes, useEffect } from "react";
 import cx from "classnames";
-import { getCanvasInstance } from "../../../getCanvasInstance";
+import { getCanvasInstance } from "../../../utils/getCanvasInstance";
 
 interface ImageCanvasProps
   extends Omit<HTMLAttributes<HTMLCanvasElement>, "onClick"> {
   imgFile?: File;
   onClick?: (x: number, y: number) => void;
-  onImageLoad?: (
-    context: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement
-  ) => void;
+  onImageLoad?: () => void;
   drawFn?: (context: CanvasRenderingContext2D) => void;
 }
 
@@ -26,7 +23,7 @@ export const ImageCanvas = forwardRef<HTMLCanvasElement, ImageCanvasProps>(
           canvas.width = img.width - (img.width % 2);
           canvas.height = img.height - (img.height % 2);
           context.drawImage(img, 0, 0, canvas.width, canvas.height);
-          onImageLoad?.(context, canvas);
+          onImageLoad?.();
         };
       }
 

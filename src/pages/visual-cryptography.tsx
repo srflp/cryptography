@@ -1,6 +1,8 @@
-import { useCallback, useRef, useState } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 import { ImageCanvas } from "../algorithms/visual-cryptography/components/ImageCanvas";
 import { getCanvasInstance } from "../getCanvasInstance";
+import { SubTitle } from "../components/Title";
+import cx from "classnames";
 
 type RGBAColor = [number, number, number, number];
 
@@ -82,9 +84,11 @@ const generateShareImageData = (
   ];
 };
 
+const defaultOperator: Operator = [true, false, false, true];
+
 const getSuperpositionedImageData = (
   shareImageData: [ImageData, ImageData],
-  operator: Operator = "and"
+  operator: Operator = defaultOperator
 ): ImageData => {
   const { width: shareWidth, height: shareHeight } = shareImageData[0];
 
@@ -96,21 +100,11 @@ const getSuperpositionedImageData = (
     const shareOnePixel = shareImageData[0].data[i];
     const shareTwoPixel = shareImageData[1].data[i];
     const op = (a: number, b: number) => {
-      switch (operator) {
-        case "and":
-          return a & b;
-        case "or":
-          return a | b;
-        case "xor":
-          return a ^ b;
-        case "nand":
-          return ~(a & b);
-        case "nor":
-          return ~(a | b);
-        case "xnor":
-          return ~(a ^ b);
-      }
-    }; // negated XOR
+      if (!a && !b) return +operator[0] * 255;
+      if (!a && b) return +operator[1] * 255;
+      if (a && !b) return +operator[2] * 255;
+      return +operator[3] * 255;
+    };
     superpositionedPixels[i] = op(shareOnePixel, shareTwoPixel);
     superpositionedPixels[i + 1] = op(shareOnePixel, shareTwoPixel);
     superpositionedPixels[i + 2] = op(shareOnePixel, shareTwoPixel);
@@ -120,7 +114,29 @@ const getSuperpositionedImageData = (
   return new ImageData(superpositionedPixels, shareWidth, shareHeight);
 };
 
-type Operator = "and" | "or" | "xor" | "nand" | "nor" | "xnor";
+type Operator = [boolean, boolean, boolean, boolean];
+
+const BlackBox = (
+  <div className={cx("w-6 h-6 border border-black bg-black")}></div>
+);
+
+const WhiteBox = (
+  <div className={cx("w-6 h-6 border border-black bg-white")}></div>
+);
+
+const BlackWhiteBox: FC<{ onClick: () => void; value: boolean }> = ({
+  onClick,
+  value,
+}) => (
+  <button
+    type="button"
+    className={cx("w-6 h-6 border border-black  text-center", {
+      "bg-white text-black": value,
+      "bg-black text-white": !value,
+    })}
+    onClick={onClick}
+  />
+);
 
 export default function Home() {
   const [imgFile, setImgFile] = useState<File>();
@@ -200,18 +216,23 @@ export default function Home() {
     [renderSuperpositionedShares]
   );
 
+  const [operator, setOperator] = useState<Operator>(defaultOperator);
+
   return (
     <div>
-      <div>
-        Wybierz zdjęcie, którego zawartości zostanie zakodowana w dwóch
-        udziałach
-      </div>
+      {!imgFile && (
+        <div>
+          Wybierz zdjęcie, którego zawartość zostanie zakodowana w dwóch
+          udziałach
+        </div>
+      )}
       <input
         type="file"
         accept="image/*"
         onChange={(e) => {
           if (!e.target.files) return;
-          const file = e.target.files[0];
+          const file = e.target.files.item(0);
+          if (!file) return;
           setImgFile(file);
         }}
       />
@@ -223,40 +244,46 @@ export default function Home() {
             ref={originalImageCanvasRef}
             onImageLoad={handleImageLoad}
           />
-          <div className="flex">
+          <div className="flex gap-3 overflow-auto">
             <div>
-              <div>Udział 1</div>
-              <ImageCanvas
-                className="border border-blue-400"
-                ref={shareOneCanvasRef}
-              />
+              <SubTitle>Udział 1</SubTitle>
+              <ImageCanvas ref={shareOneCanvasRef} />
             </div>
             <div>
-              <div>Udział 2</div>
-              <ImageCanvas
-                className="border border-blue-400"
-                ref={shareTwoCanvasRef}
-              />
+              <SubTitle>Udział 2</SubTitle>
+              <ImageCanvas ref={shareTwoCanvasRef} />
             </div>
           </div>
-          <div>Złożenie udziałów</div>
-          <select
-            name="operator"
-            placeholder="operator logiczny"
-            onChange={(e) => {
-              const operator = e.target.value as Operator;
-              renderSuperpositionedShares(operator);
-            }}
-          >
-            <option value="and">AND</option>
-            <option value="or">OR</option>
-            <option value="xor">XOR</option>
-            <option value="nand">NAND</option>
-            <option value="nor">NOR</option>
-            <option value="xnor">XNOR</option>
-          </select>
+          <SubTitle>Złożenie udziałów</SubTitle>
+          <div className="flex flex-col gap-2 mb-3">
+            {[0, 1, 2, 3].map((i) => {
+              const [a, b] = i
+                .toString(2)
+                .padStart(2, "0")
+                .split("")
+                .map(Number);
+
+              return (
+                <div className="flex gap-3" key={i}>
+                  {a ? WhiteBox : BlackBox}
+                  <span className="self-center">+</span>
+                  {b ? WhiteBox : BlackBox}
+                  <span>=</span>
+                  <BlackWhiteBox
+                    onClick={() => {
+                      const newOperator = [...operator] as Operator;
+                      newOperator[i] = !operator[i];
+                      setOperator(newOperator);
+                      renderSuperpositionedShares(newOperator);
+                    }}
+                    value={operator[i]}
+                  />
+                </div>
+              );
+            })}
+          </div>
           <ImageCanvas
-            className="border border-blue-400"
+            className="border border-black"
             ref={superpositionedSharesCanvasRef}
           />
         </>

@@ -31,7 +31,7 @@ export default function VisualCryptography() {
   }, []);
 
   return (
-    <div className="prose">
+    <div className="prose dark:prose-invert max-w-none">
       <h2>Kryptografia wizualna</h2>
       <h3>Wczytywanie obrazu</h3>
       {!imgFile && (
@@ -57,7 +57,7 @@ export default function VisualCryptography() {
         <>
           <h3>Wczytany obraz</h3>
           <ImageCanvas
-            className="border border-black"
+            className="border border-black dark:border-white"
             imgFile={imgFile}
             ref={originalImageCanvasRef}
             onImageLoad={handleImageLoad}
@@ -65,11 +65,17 @@ export default function VisualCryptography() {
           <div className="flex gap-3 overflow-auto">
             <div>
               <h3>Udział 1</h3>
-              <ImageCanvas ref={shareOneCanvasRef} />
+              <ImageCanvas
+                className="border border-black dark:border-white"
+                ref={shareOneCanvasRef}
+              />
             </div>
             <div>
               <h3>Udział 2</h3>
-              <ImageCanvas ref={shareTwoCanvasRef} />
+              <ImageCanvas
+                className="border border-black dark:border-white"
+                ref={shareTwoCanvasRef}
+              />
             </div>
           </div>
           <ShareSuperposition

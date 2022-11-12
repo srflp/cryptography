@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@heroicons/react': ^2.0.13
   '@tailwindcss/typography': ^0.5.8
   '@types/node': 18.11.9
   '@types/react': 18.0.25
@@ -10,6 +11,7 @@ specifiers:
   eslint: 8.27.0
   eslint-config-next: 13.0.3
   next: 13.0.3
+  next-themes: ^0.2.1
   postcss: ^8.4.19
   prettier: ^2.7.1
   react: 18.2.0
@@ -19,6 +21,7 @@ specifiers:
   typescript: 4.8.4
 
 dependencies:
+  '@heroicons/react': 2.0.13_react@18.2.0
   '@types/node': 18.11.9
   '@types/react': 18.0.25
   '@types/react-dom': 18.0.8
@@ -26,6 +29,7 @@ dependencies:
   eslint: 8.27.0
   eslint-config-next: 13.0.3_rmayb2veg2btbq6mbmnyivgasy
   next: 13.0.3_biqbaboplfbrettd7655fr4n2y
+  next-themes: 0.2.1_ogpkrxaz2lg6nectum6dl66tn4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   tiny-invariant: 1.3.1
@@ -70,6 +74,14 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@heroicons/react/2.0.13_react@18.2.0:
+    resolution: {integrity: sha512-iSN5XwmagrnirWlYEWNPdCDj9aRYVD/lnK3JlsC9/+fqGF80k8C7rl+1HCvBX0dBoagKqOFBs6fMhJJ1hOg1EQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.7:
@@ -1524,6 +1536,18 @@ packages:
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+    dev: false
+
+  /next-themes/0.2.1_ogpkrxaz2lg6nectum6dl66tn4:
+    resolution: {integrity: sha512-B+AKNfYNIzh0vqQQKqQItTS8evEouKD7H5Hj3kmuPERwddR2TxvDSFZuTj6T7Jfn1oyeUyJMydPl1Bkxkh0W7A==}
+    peerDependencies:
+      next: '*'
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      next: 13.0.3_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /next/13.0.3_biqbaboplfbrettd7655fr4n2y:

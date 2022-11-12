@@ -48,7 +48,10 @@ export const ShareSuperposition: FC<Props> = ({
           );
         })}
       </div>
-      <ImageCanvas className="border border-black" ref={canvasRef} />
+      <ImageCanvas
+        className="border border-black dark:border-white"
+        ref={canvasRef}
+      />
     </>
   );
 };

@@ -31,7 +31,7 @@ export default function VisualCryptography() {
   }, []);
 
   return (
-    <div className="prose dark:prose-invert max-w-none">
+    <div className="prose dark:prose-invert max-w-none mb-10">
       <h2>Kryptografia wizualna</h2>
       <h3>Wczytywanie obrazu</h3>
       {!imgFile && (

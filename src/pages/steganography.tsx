@@ -7,6 +7,14 @@ const copyDimensions = (from: HTMLCanvasElement, to: HTMLCanvasElement) => {
   to.height = from.height;
 };
 
+/**
+ * RGBA
+ * [0, 1, 2, X] pixel1
+ * [4, 5, 6, X] pixel2
+ * [8, 9, X, X] pixel3
+ */
+const bitMap = [0, 1, 2, 4, 5, 6, 8, 9];
+
 const renderHiddenMessageImage = (
   canvasRef: Ref<HTMLCanvasElement>,
   hiddenMessageImageRef: Ref<HTMLCanvasElement>,
@@ -29,22 +37,11 @@ const renderHiddenMessageImage = (
     /** jump every three pixels */
     const skip = 4 * 3 * i;
 
-    /**
-     * RGBA
-     * [0, 1, 2, X] pixel1
-     * [4, 5, 6, X] pixel2
-     * [8, 9, X, X] pixel3
-     */
-    const map = [0, 1, 2, 4, 5, 6, 8, 9];
     for (let j = 0; j < 8; j++) {
-      const k = map[j];
+      const k = bitMap[j];
 
-      /**
-       *
-       */
-      hiddenMessageImage[skip + i + k] &=
-        ((hiddenMessageImage[skip + i + k] >> 1) << 1) |
-        ((letterCode >> j) & 1);
+      hiddenMessageImage[skip + k] &=
+        ((hiddenMessageImage[skip + k] >> 1) << 1) | ((letterCode >> j) & 1);
     }
   }
 
@@ -53,6 +50,25 @@ const renderHiddenMessageImage = (
     0,
     0
   );
+};
+
+const decodeMessage = (decodedMessageRef: Ref<HTMLCanvasElement>): string => {
+  const { canvas, context } = getCanvasInstance(decodedMessageRef);
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  const hiddenMessageImage = new Uint8ClampedArray(imageData.data);
+
+  let message = "";
+
+  for (let i = 0; i < hiddenMessageImage.length; i += 4 * 3) {
+    let letterCode = 0;
+    for (let j = 0; j < 8; j++) {
+      const k = bitMap[j];
+      letterCode |= (hiddenMessageImage[i + k] & 1) << j;
+    }
+    message += String.fromCharCode(letterCode);
+  }
+
+  return message;
 };
 
 export default function Steganography() {
@@ -92,8 +108,11 @@ export default function Steganography() {
     setEncodeImgFile(file);
   }, []);
 
+  const [decodedMessage, setDecodedMessage] = useState("");
+
   const handleImageDecryption = useCallback(() => {
-    decodedMessageRef.current.innerHTML = "hello";
+    const decodedMessage = decodeMessage(decodedCanvasRef);
+    setDecodedMessage(decodedMessage);
   }, []);
 
   return (
@@ -170,8 +189,10 @@ export default function Steganography() {
                 onImageLoad={handleImageDecryption}
               />
               <p>
-                Ukryta wiadomość:
-                <span ref={decodedMessageRef}>{hiddenMessage}</span>
+                Ukryta wiadomość:{" "}
+                <div className="break-words" ref={decodedMessageRef}>
+                  {decodedMessage}
+                </div>
               </p>
             </>
           )}

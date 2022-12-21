@@ -31,7 +31,7 @@ const renderHiddenMessageImage = (
 
   const hiddenMessageImage = new Uint8ClampedArray(imageData.data);
 
-  for (let [i, letter] of [...message].entries()) {
+  for (let [i, letter] of [...message, "\0"].entries()) {
     const letterCode = letter.charCodeAt(0);
 
     /** jump every three pixels */
@@ -65,6 +65,7 @@ const decodeMessage = (decodedMessageRef: Ref<HTMLCanvasElement>): string => {
       const k = bitMap[j];
       letterCode |= (hiddenMessageImage[i + k] & 1) << j;
     }
+    if (letterCode === 0) break;
     message += String.fromCharCode(letterCode);
   }
 

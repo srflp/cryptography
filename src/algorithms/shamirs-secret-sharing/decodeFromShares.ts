@@ -1,8 +1,7 @@
-import * as codec from "./codec";
-import { BIN_ENCODING, BIT_SIZE, MAX_SHARES } from "./consts";
+import { MAX_SHARES } from "./consts";
 import { exps, logs } from "./table";
 
-function lagrange(x, p) {
+function lagrange(x: number, p: [number[], number[]]) {
   const n = MAX_SHARES;
   let product = 0;
   let sum = 0;
@@ -30,65 +29,36 @@ function lagrange(x, p) {
 
   return sum;
 }
-function parse(input: string) {
-  const share = { id: null, bits: null, data: null };
-
-  if (Buffer.isBuffer(input)) {
-    input = input.toString("hex");
-  }
-
-  if ("0" === input[0]) {
-    input = input.slice(1);
-  }
-
-  // bit count is in base36
-  share.bits = parseInt(input.slice(0, 1), 36);
-  const maxBits = BIT_SIZE - 1;
-  const idLength = maxBits.toString(16).length;
-  const regex = `^([a-kA-K3-9]{1})([a-fA-F0-9]{${idLength}})([a-fA-F0-9]+)$`;
-  const matches = new RegExp(regex).exec(input);
-
-  if (matches && matches.length) {
-    share.id = parseInt(matches[2], 16);
-    share.data = matches[3];
-  }
-  console.log(share);
-  return share;
-}
 
 export function decodeFromShares(shares: string[]) {
-  const chunks = [];
   const x = [];
-  const y = [];
+  const y: number[][] = [];
   const t = shares.length;
 
   for (let i = 0; i < t; ++i) {
-    const share = parse(Buffer.from(shares[i], "hex"));
+    const id = parseInt(shares[i].slice(0, 2), 16);
+    const data = shares[i].slice(2);
 
-    if (-1 === x.indexOf(share.id)) {
-      x.push(share.id);
+    if (x.indexOf(id) === -1) {
+      x.push(id);
 
-      const bin = codec.bin(share.data, 16);
-      const parts = codec.split(bin, 0, 2);
-
-      for (let j = 0; j < parts.length; ++j) {
+      for (let j = 0; j < data.length / 2; j++) {
         if (!y[j]) {
           y[j] = [];
         }
-        y[j][x.length - 1] = parts[j];
+        y[j][x.length - 1] = parseInt(data.slice(2 * j, 2 * j + 2), 16);
       }
     }
   }
+  y.reverse();
 
-  for (let i = 0; i < y.length; ++i) {
+  const ps = [];
+  for (let i = 0; i < y.length; i++) {
     const p = lagrange(0, [x, y[i]]);
-    chunks.unshift(codec.pad(p.toString(2)));
+    ps.push(p);
   }
 
-  const string = chunks.join("");
-  const bin = string.slice(1 + string.indexOf("1")); // >= 0
-  const hex = codec.hex(bin, BIN_ENCODING);
-  const value = codec.decode(hex);
-
-  return value;
+  const endOfSecret = ps.at(-1) === 0 ? ps.indexOf(0) : ps.length;
+  const encodedSecret = ps.slice(0, endOfSecret);
+  return new TextDecoder().decode(new Uint8Array(encodedSecret));
 }

@@ -62,7 +62,7 @@ export default function SecretSharing() {
               placeholder="liczba całkowita"
               type="number"
               value={threshold}
-              min={1}
+              min={2}
               max={shareCount}
               onChange={(e) => {
                 if (e.target.valueAsNumber < 1) setThreshold(1);
@@ -94,7 +94,13 @@ export default function SecretSharing() {
 
                           const newSharesDecoding = [...sharesDecoding];
                           if (firstEmptyIndex !== -1) {
-                            newSharesDecoding[firstEmptyIndex] = shares[index];
+                            if (sharesDecodingCount > sharesDecoding.length) {
+                              newSharesDecoding[sharesDecoding.length] =
+                                shares[index];
+                            } else {
+                              newSharesDecoding[firstEmptyIndex] =
+                                shares[index];
+                            }
                           } else {
                             newSharesDecoding[sharesDecoding.length - 1] =
                               shares[index];

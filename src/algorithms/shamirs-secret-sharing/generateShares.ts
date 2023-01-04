@@ -18,10 +18,9 @@ export const generateShares = (
     secretLen: secretBuf.length,
   }));
 
-  // append 1 to get extra padding, we'll account for this later
   // divides binary string into 128-bit chunks (array of 16 8-bit numbers (0-255)),
   // pads with 0s if necessary to hide the length of the secret
-  let parts = [...secretBuf, 1];
+  let parts = [...secretBuf];
   for (
     let i = 0;
     i < BYTE_PADDING - (secretBuf.length % BYTE_PADDING) - 1;
@@ -56,9 +55,7 @@ export const generateShares = (
   const result = [];
   for (let i = 0; i < shareCount; i++) {
     const str =
-      "08" +
-      (i + 1).toString(16).padStart(2, "0") +
-      rawShares[i].reverse().join("");
+      (i + 1).toString(16).padStart(2, "0") + rawShares[i].reverse().join("");
 
     result.push(str);
   }

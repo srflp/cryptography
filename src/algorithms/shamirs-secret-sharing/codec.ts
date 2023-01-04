@@ -24,14 +24,17 @@ export function pad(string: string, multiple: number = BIT_COUNT) {
   return result;
 }
 
-export function hex(buffer: Buffer | string, encoding: string = UTF8_ENCODING) {
-  const padding = 2 * BYTES_PER_CHARACTER;
+export function hex(
+  buffer: Uint8Array | string,
+  encoding: string = UTF8_ENCODING
+) {
+  const padding = BYTES_PER_CHARACTER;
 
   if ("string" === typeof buffer) {
     return fromString();
   }
 
-  if (Buffer.isBuffer(buffer)) {
+  if (Buffer.isBuffer(buffer) || buffer instanceof Uint8Array) {
     return fromBuffer();
   }
 
@@ -63,7 +66,7 @@ export function hex(buffer: Buffer | string, encoding: string = UTF8_ENCODING) {
   function fromBuffer() {
     const chunks = [];
 
-    for (let i = 0; i < buffer.length; ++i) {
+    for (let i = 0; i < buffer.length; i++) {
       const chunk = buffer[i].toString(16);
       chunks.unshift(pad(chunk, padding));
     }
@@ -72,12 +75,8 @@ export function hex(buffer: Buffer | string, encoding: string = UTF8_ENCODING) {
   }
 }
 
-export function bin(buffer, radix) {
+export function bin(buffer: Uint8Array | string, radix = 16) {
   const chunks = [];
-
-  if (!radix) {
-    radix = 16;
-  }
 
   for (let i = buffer.length - 1; i >= 0; --i) {
     let chunk = null;
@@ -125,7 +124,7 @@ export function encode(id, data) {
 }
 
 export function decode(buffer, encoding) {
-  const padding = 2 * BYTES_PER_CHARACTER;
+  const padding = BYTES_PER_CHARACTER;
   const offset = padding;
   const chunks = [];
 
@@ -144,9 +143,9 @@ export function decode(buffer, encoding) {
   return Buffer.from(chunks);
 }
 
-export function split(string, padding, radix) {
+export function split(string: string, padding: number, radix: number) {
   const chunks = [];
-  let i = 0;
+  let i;
 
   if (Buffer.isBuffer(string)) {
     string = string.toString();

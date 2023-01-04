@@ -8,9 +8,10 @@ export default function SecretSharing() {
   const [secret, setSecret] = useState("sekret123");
   const [shareCount, setShareCount] = useState(5);
   const [threshold, setThreshold] = useState(3);
+  const [generatingInfo, setGeneratingInfo] = useState<Record<string, any>>({});
   const shares = useMemo(
-    () => generateShares(secret, shareCount, threshold),
-    [secret, shareCount, threshold]
+    () => generateShares(secret, shareCount, threshold, setGeneratingInfo),
+    [secret, shareCount, threshold, setGeneratingInfo]
   );
 
   const [sharesDecodingCount, setSharesDecodingCount] = useState(3);
@@ -72,6 +73,7 @@ export default function SecretSharing() {
               }}
             />
           </InputContainer>
+          <pre>{JSON.stringify(generatingInfo, null, 2)}</pre>
           <h3>Wygenerowane udziały</h3>
           <InputContainer>
             {Array.from({ length: shareCount }, (_, i) => i + 1).map(

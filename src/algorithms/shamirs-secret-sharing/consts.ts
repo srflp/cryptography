@@ -1,6 +1,6 @@
 export const PRIMITIVE_POLYNOMIAL = 29;
 
-export const BIT_PADDING = 128;
+export const BYTE_PADDING = 16; // 128 bits
 export const BIT_COUNT = 8;
 export const BIT_SIZE = 2 ** BIT_COUNT;
 

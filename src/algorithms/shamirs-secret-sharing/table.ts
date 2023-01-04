@@ -13,3 +13,4 @@ for (let i = 0, x = 1; i < BIT_SIZE; ++i) {
     x = x & MAX_SHARES;
   }
 }
+console.log("tables", zeroes, logs, exps);

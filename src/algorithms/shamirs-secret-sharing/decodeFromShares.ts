@@ -52,7 +52,7 @@ function parse(input: string) {
     share.id = parseInt(matches[2], 16);
     share.data = matches[3];
   }
-
+  console.log(share);
   return share;
 }
 

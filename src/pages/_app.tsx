@@ -8,7 +8,7 @@ import ThemeToggle from "../components/ThemeToggle";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider enableSystem={true} attribute="class">
-      <div className="container overflow-auto">
+      <div className="container overflow-auto px-6">
         <header className="flex justify-between items-baseline">
           <SiteTitle>Kryptografia</SiteTitle>
           <ThemeToggle />
@@ -16,9 +16,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <nav className="flex justify-between my-5">
           <Link href="visual-cryptography">Kryptografia wizualna</Link>
           <Link href="steganography">Steganografia</Link>
-          <Link href="steganography2">Steganografia 2</Link>
           <Link href="secret-sharing">Podział sekretu</Link>
-          <Link href="bbs">BBS</Link>
+          <Link href="diffie-hellman">Diffie-Hellman</Link>
         </nav>
         <Component {...pageProps} />
       </div>

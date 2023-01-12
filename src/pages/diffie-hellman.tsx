@@ -1,4 +1,5 @@
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import Head from "next/head";
 import { useState } from "react";
 import { Input } from "../components/Input";
 
@@ -16,6 +17,9 @@ export default function DiffieHellman() {
 
   return (
     <div className="prose dark:prose-invert max-w-none mb-10">
+      <Head>
+        <title>Diffie-Hellman</title>
+      </Head>
       <h2>Uzgadnianie klucza metodą Diffie-Hellman</h2>
       <div className="grid grid-cols-1 gap-3">
         <div>

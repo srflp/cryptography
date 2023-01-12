@@ -1,6 +1,7 @@
 import { ChangeEvent, Ref, useCallback, useRef, useState } from "react";
 import { ImageCanvas } from "../algorithms/visual-cryptography/shared/ImageCanvas";
 import { getCanvasInstance } from "../utils/getCanvasInstance";
+import Head from "next/head";
 
 const copyDimensions = (from: HTMLCanvasElement, to: HTMLCanvasElement) => {
   to.width = from.width;
@@ -118,6 +119,9 @@ export default function Steganography() {
 
   return (
     <div className="prose dark:prose-invert max-w-none mb-10">
+      <Head>
+        <title>Steganografia</title>
+      </Head>
       <h2>Steganografia</h2>
       <div className="grid grid-cols-2">
         <section>

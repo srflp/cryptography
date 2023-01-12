@@ -3,6 +3,7 @@ import { ImageCanvas } from "../algorithms/visual-cryptography/shared/ImageCanva
 import { ShareSuperposition } from "../algorithms/visual-cryptography/ShareSuperposition";
 import { renderShareSuperposition } from "../algorithms/visual-cryptography/share-superposition/render";
 import { renderShares } from "../algorithms/visual-cryptography/share-generation/render";
+import Head from "next/head";
 
 export default function VisualCryptography() {
   const [imgFile, setImgFile] = useState<File>();
@@ -32,6 +33,9 @@ export default function VisualCryptography() {
 
   return (
     <div className="prose dark:prose-invert max-w-none mb-10">
+      <Head>
+        <title>Kryptografia wizualna</title>
+      </Head>
       <h2>Kryptografia wizualna</h2>
       <h3>Wczytywanie obrazu</h3>
       {!imgFile && (

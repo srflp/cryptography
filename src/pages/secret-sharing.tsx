@@ -3,9 +3,11 @@ import { useMemo, useState } from "react";
 import { Input, InputContainer } from "../components/Input";
 import { generateShares } from "../algorithms/shamirs-secret-sharing/generateShares";
 import { decodeFromShares } from "../algorithms/shamirs-secret-sharing/decodeFromShares";
+import Head from "next/head";
 
 export default function SecretSharing() {
   const [secret, setSecret] = useState("sekret123");
+
   const [shareCount, setShareCount] = useState(5);
   const [threshold, setThreshold] = useState(3);
   const [generatingInfo, setGeneratingInfo] = useState<Record<string, any>>({});
@@ -28,6 +30,9 @@ export default function SecretSharing() {
 
   return (
     <div className="prose dark:prose-invert max-w-none mb-10">
+      <Head>
+        <title>Podział sekretu</title>
+      </Head>
       <h2>Podział sekretu - Shamir&apos;s Secret Sharing</h2>
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -184,10 +189,6 @@ export default function SecretSharing() {
           </div>
         </div>
       </div>
-      <MathJaxContext>
-        <h2>Basic MathJax example with Latex</h2>
-        <MathJax>{`\\(\\frac{10}{4x} \\approx 2^{12}\\)`}</MathJax>
-      </MathJaxContext>
     </div>
   );
 }
